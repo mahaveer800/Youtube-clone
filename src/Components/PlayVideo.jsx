@@ -1,0 +1,169 @@
+import React, { useState } from "react";
+import video1 from "../assets/video.mp4";
+import like from "../assets/like.png";
+import dislike from "../assets/dislike.png";
+import share from "../assets/share.png";
+import save from "../assets/save.png";
+import jack from "../assets/jack.png";
+import user_profile from "../assets/user_profile.jpg";
+
+const PlayVideo = () => {
+  const [comments, setComments] = useState([
+    {
+      id: 1,
+      username: "Narendra",
+      profile: user_profile,
+      text: "Amazing tutorial! Very helpful 🔥",
+      time: "2 hours ago",
+    },
+    {
+      id: 2,
+      username: "Simron",
+      profile: user_profile,
+      text: "This is exactly what I was looking for 👌",
+      time: "5 hours ago",
+    },
+  ]);
+
+  const [newComment, setNewComment] = useState("");
+
+  const handleComment = () => {
+    if (!newComment.trim()) return;
+
+    const newEntry = {
+      id: Date.now(),
+      username: "You", // later dynamic ho sakta hai
+      profile: user_profile,
+      text: newComment,
+      time: "Just now",
+    };
+
+    setComments([newEntry, ...comments]);
+    setNewComment("");
+  };
+
+  return (
+    <div className="w-full max-w-4xl mx-auto md:mt-14 sm:mt-14">
+      {/* Video Player */}
+      <video
+        src={video1}
+        controls
+        className="w-full rounded-lg shadow-lg"
+      ></video>
+
+      {/* Video Info Section */}
+      <div className="mt-2">
+        <h2 className="text-lg font-semibold">Sample Video Title</h2>
+        <p className="text-sm text-gray-600">1.2M views • 2 days ago</p>
+      </div>
+
+      {/* Channel + Actions */}
+      <div className="mt-2 flex items-center justify-between">
+        {/* Channel Info */}
+        <div className="flex items-center gap-1">
+          <img
+            src={jack}
+            alt="Channel Profile"
+            className="w-12 h-12 rounded-full"
+          />
+          <div>
+            <h3 className="font-semibold text-sm">Mahi’s Channel</h3>
+            <p className="text-xs text-gray-500">5M subscribers</p>
+          </div>
+          <button className="ml-4 px-4 py-1 bg-red-600 text-white rounded-full text-sm">
+            Subscribe
+          </button>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2">
+          <button className="flex items-center gap-1">
+            <img src={like} alt="Like" className="w-5" />
+            <span className="text-sm">120K</span>
+          </button>
+          <button className="flex items-center gap-1">
+            <img src={dislike} alt="Dislike" className="w-5" />
+          </button>
+          <button className="flex items-center gap-1">
+            <img src={share} alt="Share" className="w-5" />
+            <span className="text-sm">Share</span>
+          </button>
+          <button className="flex items-center gap-1">
+            <img src={save} alt="Save" className="w-5" />
+            <span className="text-sm">Save</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Comments Section */}
+      <div className="mt-6">
+        <h3 className="text-lg font-semibold mb-4">
+          {comments.length} Comments
+        </h3>
+
+        {/* Add Comment */}
+        <div className="flex items-start gap-3 mb-6">
+          <img
+            src={user_profile}
+            alt="Your profile"
+            className="w-10 h-10 rounded-full"
+          />
+          <div className="flex-1">
+            <input
+              type="text"
+              placeholder="Add a public comment..."
+              className="w-full border-b border-gray-300 focus:outline-none focus:border-gray-500 text-sm p-1"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleComment()}
+            />
+            <div className="flex justify-end gap-2 mt-2">
+              <button
+                onClick={() => setNewComment("")}
+                className="text-sm px-3 py-1 rounded-md hover:bg-gray-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleComment}
+                className="text-sm px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              >
+                Comment
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Render Comments */}
+        <div className="space-y-4">
+          {comments.map((c) => (
+            <div key={c.id} className="flex items-start gap-3">
+              <img
+                src={c.profile}
+                alt={c.username}
+                className="w-10 h-10 rounded-full"
+              />
+              <div>
+                <p className="text-sm font-semibold">
+                  {c.username}{" "}
+                  <span className="text-xs text-gray-500 ml-1">{c.time}</span>
+                </p>
+                <p className="text-sm">{c.text}</p>
+                <div className="flex gap-4 mt-1 text-xs text-gray-500">
+                  <button>👍 Like</button>
+                  <button>👎 Dislike</button>
+                  <button>Reply</button>
+                </div>
+              </div>
+            </div>
+            
+
+
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default PlayVideo;
