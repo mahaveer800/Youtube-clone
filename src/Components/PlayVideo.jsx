@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import video1 from "../assets/video.mp4";
 import like from "../assets/like.png";
 import dislike from "../assets/dislike.png";
 import share from "../assets/share.png";
@@ -7,7 +6,7 @@ import save from "../assets/save.png";
 import jack from "../assets/jack.png";
 import user_profile from "../assets/user_profile.jpg";
 
-const PlayVideo = () => {
+const PlayVideo = ({ videoId }) => {
   const [comments, setComments] = useState([
     {
       id: 1,
@@ -32,7 +31,7 @@ const PlayVideo = () => {
 
     const newEntry = {
       id: Date.now(),
-      username: "You", // later dynamic ho sakta hai
+      username: "You",
       profile: user_profile,
       text: newComment,
       time: "Just now",
@@ -43,13 +42,19 @@ const PlayVideo = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto md:mt-14 sm:mt-14">
+    <div className="w-full max-w-4xl mx-auto mt-14 sm:mt-20 md:mt-14">
       {/* Video Player */}
-      <video
-        src={video1}
-        controls
-        className="w-full rounded-lg shadow-lg"
-      ></video>
+     <iframe
+  src={`https://www.youtube.com/embed/${videoId || "dQw4w9WgXcQ"}?rel=0&modestbranding=1&controls=1&disablekb=1`}
+
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+  referrerPolicy="strict-origin-when-cross-origin"
+  allowFullScreen
+  className="w-full aspect-video rounded-lg shadow-lg"
+  title="YouTube video"
+></iframe>
+
 
       {/* Video Info Section */}
       <div className="mt-2">
@@ -156,9 +161,6 @@ const PlayVideo = () => {
                 </div>
               </div>
             </div>
-            
-
-
           ))}
         </div>
       </div>
