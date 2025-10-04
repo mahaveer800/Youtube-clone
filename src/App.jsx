@@ -6,15 +6,17 @@ import Home from "./Pages/Home/Home";
 import Video from "./Pages/Video/Video";
 
 const App = () => {
+  const [searchTerm, setSearchTerm] = useState(""); // 🔹 Global search term
+
   return (
     <div className="flex flex-col h-screen">
-      {/* Navbar hamesha top pe */}
-      <Navbar />
-     
+      {/* Navbar */}
+      <Navbar setSearchTerm={setSearchTerm} />
+
       {/* Routes */}
       <div className="flex-1 overflow-y-auto bg-zinc-100">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home searchTerm={searchTerm} />} /> {/* ✅ Pass searchTerm */}
           <Route path="/video/:categoryId/:videoId" element={<Video />} />
         </Routes>
       </div>
