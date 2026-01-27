@@ -1,6 +1,7 @@
 import React from "react";
 import { X } from "lucide-react";
 
+// Category Icons
 import home from "../assets/home.png";
 import game_icon from "../assets/game_icon.png";
 import automobiles from "../assets/automobiles.png";
@@ -11,11 +12,14 @@ import music from "../assets/music.png";
 import blogs from "../assets/blogs.png";
 import news from "../assets/news.png";
 
+// Subscribed User Images
 import jack from "../assets/jack.png";
 import simon from "../assets/simon.png";
 import tom from "../assets/tom.png";
 import megan from "../assets/megan.png";
 import cameron from "../assets/cameron.png";
+
+const fallbackImage = "https://via.placeholder.com/24";
 
 const Sidebar = ({ isOpen, setIsOpen, category, setCategory }) => {
   const Icon = [
@@ -39,50 +43,55 @@ const Sidebar = ({ isOpen, setIsOpen, category, setCategory }) => {
   ];
 
   return (
-    <>
-      <div
-  className={`fixed top-16 py-4 left-0 h-[calc(100vh-3.5rem)] sm:w-24 md:w-56 bg-zinc-200 shadow-md transform transition-transform duration-300 z-40
-    ${isOpen ? "translate-x-0" : "-translate-x-full"}
-    md:translate-x-0 overflow-y-auto`}
->
-  {/* Mobile close button */}
-  <div className="md:hidden flex justify-end p-3">
-    <button onClick={() => setIsOpen(false)}>
-      <X className="h-6 w-6" />
-    </button>
-  </div>
-
-  {/* Sidebar content */}
-  <div className="flex flex-col px-4">
-    {Icon.map((item, i) => (
-      <div
-        key={i}
-        onClick={() => setCategory(item.id)}
-        className={`flex items-center gap-2 cursor-pointer hover:bg-zinc-300 p-2 rounded-md ${
-          category === item.id ? "bg-zinc-300 font-semibold" : ""
-        }`}
-      >
-        <img className="h-6" src={item.icon} alt={item.label} />
-        <p className="hidden md:flex">{item.label}</p>
+    <div
+      className={`fixed top-16 left-0 h-[calc(100vh-4rem)] w-52 sm:w-24 md:w-56 bg-zinc-200 shadow-md transform transition-transform duration-300 z-40 overflow-y-auto
+      ${isOpen ? "translate-x-0" : "-translate-x-full"} 
+      md:translate-x-0`}
+    >
+      <div className="md:hidden flex justify-end p-3">
+        <button onClick={() => setIsOpen(false)}>
+          <X className="h-6 w-6" />
+        </button>
       </div>
-    ))}
 
-    <hr className="my-3" />
+      <div className="flex flex-col px-4 pb-6">
+        {Icon.map((item, i) => (
+          <div
+            key={i}
+            onClick={() => setCategory(item.id)}
+            className={`flex items-center gap-3 cursor-pointer hover:bg-zinc-300 p-2 rounded-lg transition ${
+              category === item.id ? "bg-zinc-300 font-semibold" : ""
+            }`}
+          >
+            <img
+              className="h-6 w-6 object-contain"
+              src={item.icon || fallbackImage}
+              alt={item.label}
+              onError={(e) => (e.target.src = fallbackImage)}
+            />
+            <p className="text-sm md:flex hidden">{item.label}</p>
+          </div>
+        ))}
 
-    <h3 className="font-semibold text-sm">Subscribed</h3>
-    {Name.map((user, i) => (
-      <div
-        key={i}
-        className="flex items-center gap-1 cursor-pointer hover:bg-zinc-300 p-2 rounded-md"
-      >
-        <img className="h-6 rounded-full" src={user.img} alt={user.name} />
-        <p className="hidden md:flex">{user.name}</p>
+        <hr className="my-4" />
+
+        <h3 className="font-semibold text-sm mb-2">Subscribed</h3>
+        {Name.map((user, i) => (
+          <div
+            key={i}
+            className="flex items-center gap-3 cursor-pointer hover:bg-zinc-300 p-2 rounded-lg transition"
+          >
+            <img
+              className="h-6 w-6 rounded-full object-cover"
+              src={user.img || fallbackImage}
+              alt={user.name}
+              onError={(e) => (e.target.src = fallbackImage)}
+            />
+            <p className="text-sm md:flex hidden">{user.name}</p>
+          </div>
+        ))}
       </div>
-    ))}
-  </div>
-</div>
-
-    </>
+    </div>
   );
 };
 

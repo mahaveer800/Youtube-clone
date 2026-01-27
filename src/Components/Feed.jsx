@@ -10,6 +10,18 @@ import thumbnail6 from "../assets/thumbnail6.png";
 import thumbnail7 from "../assets/thumbnail7.png";
 import thumbnail8 from "../assets/thumbnail8.png";
 
+const categoryLabels = {
+  0: "Home",
+  20: "Gaming",
+  2: "Automobiles",
+  17: "Sports",
+  24: "Entertainment",
+  28: "Technology",
+  10: "Music",
+  22: "Blogs",
+  25: "News",
+};
+
 const Feed = ({ category, searchTerm }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,24 +44,26 @@ const Feed = ({ category, searchTerm }) => {
         let url = "";
 
         if (searchTerm && searchTerm.trim() !== "") {
-          // 🔍 Search keyword se related videos
           url = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=40&q=${encodeURIComponent(
             searchTerm
           )}&regionCode=IN&key=${API_KEY}`;
         } else {
-          // 🎞️ Recommended / Most Popular feed
-          url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&chart=mostPopular&videoCategoryId=${
-            category || 0
-          }&regionCode=IN&maxResults=40&key=${API_KEY}`;
+          url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics&chart=mostPopular&videoCategoryId=${category}&regionCode=IN&maxResults=40&key=${API_KEY}`;
         }
 
         const res = await fetch(url);
         const result = await res.json();
 
-        if (result.items) {
+        if (result.items && result.items.length > 0) {
           setData(result.items);
         } else {
-          setData([]);
+          const label = categoryLabels[category] || "Trending";
+          const fallbackUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&maxResults=40&q=${encodeURIComponent(
+            label
+          )}&regionCode=IN&key=${API_KEY}`;
+          const fallbackRes = await fetch(fallbackUrl);
+          const fallbackResult = await fallbackRes.json();
+          setData(fallbackResult.items || []);
         }
       } catch (err) {
         console.error("Error fetching videos:", err);
@@ -70,16 +84,14 @@ const Feed = ({ category, searchTerm }) => {
         </p>
       ) : data.length > 0 ? (
         data.map((item, i) => {
-          // ✅ Handle both API types (search or videos)
           const videoId = item.id?.videoId || item.id;
           const snippet = item.snippet;
-
           if (!snippet) return null;
 
           return (
             <Link
               key={videoId}
-              to={`/video/${category || 0}/${videoId}`}
+              to={`/video/${category}/${videoId}`}
               className="bg-white rounded-md overflow-hidden shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
             >
               <img
@@ -94,7 +106,9 @@ const Feed = ({ category, searchTerm }) => {
                 <h3 className="font-semibold text-sm line-clamp-2">
                   {snippet?.title}
                 </h3>
-                <p className="text-xs text-gray-600">{snippet?.channelTitle}</p>
+                <p className="text-xs text-gray-600">
+                  {snippet?.channelTitle}
+                </p>
                 {item.statistics && (
                   <p className="text-xs text-gray-500">
                     {formatViews(item.statistics?.viewCount)} views
