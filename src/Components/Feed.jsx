@@ -89,11 +89,15 @@ const Feed = ({ category, searchTerm }) => {
           if (!snippet) return null;
 
           return (
-            <Link
-              key={videoId}
-              to={`/video/${category}/${videoId}`}
-              className="bg-white rounded-md overflow-hidden shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
-            >
+          <Link
+  
+  // /home/video/${categoryId}/${videoId}
+
+          key={videoId}
+        to={`/home/video/${category}/${videoId}`}
+            className="bg-white rounded-md overflow-hidden shadow hover:shadow-lg hover:scale-105 transition-transform duration-200"
+>
+
               <img
                 src={
                   snippet?.thumbnails?.medium?.url ||

@@ -9,10 +9,10 @@ const Video = () => {
   const [currentVideoId, setCurrentVideoId] = useState(videoId);
 
   const handleVideoClick = (id) => {
-    setCurrentVideoId(id);
-    // Update URL for SPA navigation
-    navigate(`/video/${id}/${categoryId || 0}`);
-  };
+  setCurrentVideoId(id);
+  navigate(`/home/video/${categoryId || 0}/${id}`);
+};
+
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 p-4">
